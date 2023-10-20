@@ -1,4 +1,4 @@
-import { useEffect, useRef } from '../hook/index.js';
+import { createComposer, createHook } from '../core/index.js';
 
 export type EscapeEvent = CustomEvent<KeyboardEvent | MouseEvent>;
 export type EscapeOptions = {
@@ -73,71 +73,14 @@ export type EscaperFactory = {
   subscribe: (callback: (e: EscapeEvent) => void) => () => void;
 }
 
-export function createEscaper(init?: EscapeOptions): EscaperFactory {
-  const subscribers = new Set<(e: EscapeEvent) => void>();
-  const subscriptions = new Map<(e: EscapeEvent) => void, () => void>();
-
-  let client: Escaper;
-
-  return {
-    escape: (element: HTMLElement, options?: EscapeOptions) => {
-      client = escape(element, options ?? init);
-
-      for (const callback of subscribers) {
-        subscriptions.set(callback, client.subscribe(callback));
-      }
-    },
-    update: (newOptions?: EscapeOptions) => {
-      client?.update(newOptions);
-    },
-    destroy: () => {
-      client?.destroy();
-      subscribers.clear();
-      subscriptions.clear();
-    },
-    subscribe: (callback: (e: EscapeEvent) => void) => {
-      subscribers.add(callback);
-
-      if (client) {
-        subscriptions.set(callback, client.subscribe(callback));
-      }
-
-      return () => {
-        subscribers.delete(callback);
-        subscriptions.get(callback)?.();
-        subscriptions.delete(callback);
-      };
-    },
-  };
+export function createEscaper(init?: EscapeOptions) {
+  return createComposer('escape', escape, init);
 }
 
 export type EscaperRef = {
   current?: HTMLElement;
 };
 
-export function useEscape(init?: EscapeOptions): [ EscaperRef, Escaper['update'], Escaper['destroy'], Escaper['subscribe'], Escaper ] {
-  const target = useRef<HTMLElement>();
-  const client = createEscaper(init);
-
-  const ref = {
-    get current(): HTMLElement | undefined {
-      return target.current;
-    },
-    set current(element: HTMLElement | undefined) {
-      if (element && element !== target.current) {
-        target.current = element;
-        client.escape(element);
-      } else {
-        client.destroy();
-      }
-    },
-  };
-
-  useEffect(() => {
-    return () => {
-      client.destroy();
-    };
-  }, [ ref ]);
-
-  return [ ref, client.update, client.destroy, client.subscribe, client ];
+export function useEscape(init?: EscapeOptions) {
+  return createHook('escape', escape, init);
 }

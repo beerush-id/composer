@@ -1,9 +1,13 @@
 export type FillParentOptions = {
   width?: boolean;
   height?: boolean;
+  siblings?: boolean;
 };
 
-export function fillParent(self: HTMLElement, options: FillParentOptions = { height: true, width: true }) {
+export function fillParent(
+  self: HTMLElement,
+  options: FillParentOptions = { height: true, width: true, siblings: true },
+) {
   if (!self.parentElement || !(self.parentElement instanceof HTMLElement)) {
     throw new Error('Element must have a parent to fill!');
   }
@@ -41,6 +45,8 @@ export function fillParent(self: HTMLElement, options: FillParentOptions = { hei
     }
   };
 
+  update();
+
   return {
     update,
     destroy: () => {
@@ -49,10 +55,10 @@ export function fillParent(self: HTMLElement, options: FillParentOptions = { hei
   };
 }
 
-export function fillHeight(self: HTMLElement) {
-  return fillParent(self, { height: true });
+export function fillHeight(self: HTMLElement, siblings = true) {
+  return fillParent(self, { height: true, siblings });
 }
 
-export function fillWidth(self: HTMLElement) {
-  return fillParent(self, { width: true });
+export function fillWidth(self: HTMLElement, siblings = true) {
+  return fillParent(self, { width: true, siblings });
 }

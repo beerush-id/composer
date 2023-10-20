@@ -13,7 +13,33 @@
       "types": "./lib/esm/index.d.ts",
       "import": "./lib/esm/index.js",
       "require": "./lib/cjs/index.js"
-    }
+    },
+    "./actions": {
+      "types": "./lib/esm/actions/index.d.ts",
+      "import": "./lib/esm/actions/index.js",
+      "require": "./lib/cjs/actions/index.js"
+    },
+    "./components": {
+      "types": "./lib/esm/components/index.d.ts",
+      "import": "./lib/esm/components/index.js",
+      "require": "./lib/cjs/components/index.js"
+    },
+    "./styles": {
+      "types": "./lib/esm/styles/index.d.ts",
+      "import": "./lib/esm/styles/index.js",
+      "require": "./lib/cjs/styles/index.js"
+    },
+    "./utils": {
+      "types": "./lib/esm/utils/index.d.ts",
+      "import": "./lib/esm/utils/index.js",
+      "require": "./lib/cjs/utils/index.js"
+    },
+    "./color": {
+      "types": "./lib/esm/colors/index.d.ts",
+      "import": "./lib/esm/colors/index.js",
+      "require": "./lib/cjs/colors/index.js"
+    },
+    "./color/*": "./lib/esm/colors/*"
   },
   "directories": {
     "lib": "lib",
