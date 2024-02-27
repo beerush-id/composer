@@ -132,7 +132,9 @@ export class Tab {
 }
 
 export function createTab(name = 'global-tab', options?: TabOptions): State<Tab> {
-  return session(name, new Tab(name, options) as never);
+  return session(name, () => {
+    return new Tab(name, options) as never;
+  });
 }
 
 export function parseId(id: TabId): TabId {
